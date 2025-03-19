@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriTrack - Tracking Gizi Harian</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+                <a class="navbar-brand" href="#">
+                    <h4><img src="logo.png" alt="Logo" width="30" height="31" class="d-inline-block align-text-top">
+                        Nutritrack</h4>
+                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line me-1"></i> Progress
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-utensils me-1"></i> Makanan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-tasks me-1"></i> Rencana
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-bell me-1"></i> Notifikasi
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user-circle me-1"></i> Profil
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Date Selector -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Tracking Gizi</h2>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h5 class="mx-3 mb-0">Selasa, 18 Maret 2025</h5>
+                <button class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Daily Summary Card -->
+            <div class="col-lg-8 mb-4">
+                <div class="dash-card daily-summary mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <h5>Total Kalori Hari Ini</h5>
+                                <div class="d-flex align-items-end mb-3">
+                                    <h2 class="mb-0 me-2">1,450</h2>
+                                    <h4 class="mb-0 text-white-50">/ 2,000 kkal</h4>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 72.5%" 
+                                        aria-valuenow="72.5" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="mt-2">Anda masih membutuhkan 550 kkal untuk mencapai target</p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="circular-progress mx-auto">
+                                    <canvas id="calorieGauge"></canvas>
+                                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+                                        <h6 class="mb-0">72.5%</h6>
+                                        <small>dari target</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutrient Breakdown -->
+                <div class="dash-card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-pie me-2"></i> Distribusi Nutrisi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <canvas id="nutrientsPieChart" height="220"></canvas>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="nutrient-icon carbs text-white">
+                                        <i class="fas fa-bread-slice"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Karbohidrat</h6>
+                                        <div class="d-flex justify-content-between">
+                                            <span>180g / 250g</span>
+                                            <span class="ms-2">72%</span>
+                                        </div>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="nutrient-icon protein text-white">
+                                        <i class="fas fa-drumstick-bite"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Protein</h6>
+                                        <div class="d-flex justify-content-between">
+                                            <span>85g / 120g</span>
+                                            <span class="ms-2">71%</span>
+                                        </div>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 71%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="nutrient-icon fats text-white">
+                                        <i class="fas fa-oil-can"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Lemak</h6>
+                                        <div class="d-flex justify-content-between">
+                                            <span>45g / 65g</span>
+                                            <span class="ms-2">69%</span>
+                                        </div>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 69%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="nutrient-icon fiber text-white">
+                                        <i class="fas fa-seedling"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">Serat</h6>
+                                        <div class="d-flex justify-content-between">
+                                            <span>18g / 30g</span>
+                                            <span class="ms-2">60%</span>
+                                        </div>
+                                        <div class="progress mt-1">
+                                            <div class="progress-bar bg-info" role="progressbar" style="width: 60%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Diary -->
+                <div class="dash-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-utensils me-2"></i> Riwayat Makanan</h5>
+                        <button class="btn btn-sm btn-add-food" data-bs-toggle="modal" data-bs-target="#addFoodModal">
+                            <i class="fas fa-plus me-1"></i> Tambah Makanan
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Breakfast -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0"><span class="meal-tag breakfast">Sarapan</span></h6>
+                                <span>425 kkal</span>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">nasi goreng telur</h6>
+                                    <small>1 mangkuk (250g)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">320 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 45g</span>
+                                        <span class="badge bg-success">P: 12g</span>
+                                        <span class="badge bg-warning">L: 8g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Susu</h6>
+                                    <small>1 gelas (200ml)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">105 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 12g</span>
+                                        <span class="badge bg-success">P: 8g</span>
+                                        <span class="badge bg-warning">L: 2.5g</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lunch -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0"><span class="meal-tag lunch">Makan Siang</span></h6>
+                                <span>625 kkal</span>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Nasi kuning</h6>
+                                    <small>1 porsi (150g)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">180 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 40g</span>
+                                        <span class="badge bg-success">P: 4g</span>
+                                        <span class="badge bg-warning">L: 1g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Mie ayam</h6>
+                                    <small>1 mangkuk 240g</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">480 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 0g</span>
+                                        <span class="badge bg-success">P: 35g</span>
+                                        <span class="badge bg-warning">L: 8g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Sop buah</h6>
+                                    <small>1 mangkuk (200g)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">125 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 15g</span>
+                                        <span class="badge bg-success">P: 2g</span>
+                                        <span class="badge bg-warning">L: 4g</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dinner -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0"><span class="meal-tag dinner">Makan Malam</span></h6>
+                                <span>400 kkal</span>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Roti Bakar</h6>
+                                    <small>3 potong (210g)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">500 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 20g</span>
+                                        <span class="badge bg-success">P: 3g</span>
+                                        <span class="badge bg-warning">L: 15g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="food-item">
+                                <div>
+                                    <h6 class="mb-0">Tempe goreng</h6>
+                                    <small>1 buah sedang (150g)</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="d-block">120 kkal</span>
+                                    <div>
+                                        <span class="badge bg-primary">K: 27g</span>
+                                        <span class="badge bg-success">P: 3g</span>
+                                        <span class="badge bg-warning">L: 0g</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <!-- Water Tracker -->
+                <div class="dash-card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-tint me-2"></i> Konsumsi Air</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <h6>Target: 8 gelas (2000ml)</h6>
+                            <div class="progress mt-2 mb-2">
+                                <div class="progress-bar bg-info" role="progressbar" style="width: 62.5%" 
+                                    aria-valuenow="62.5" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <p>5 dari 8 gelas (1250ml)</p>
+                        </div>
+                        <div class="d-flex justify-content-between my-3">
+                            <i class="fas fa-glass-water water-glass filled"></i>
+                            <i class="fas fa-glass-water water-glass filled"></i>
+                            <i class="fas fa-glass-water water-glass filled"></i>
+                            <i class="fas fa-glass-water water-glass filled"></i>
+                            <i class="fas fa-glass-water water-glass filled"></i>
+                            <i class="fas fa-glass-water water-glass"></i>
+                            <i class="fas fa-glass-water water-glass"></i>
+                            <i class="fas fa-glass-water water-glass"></i>
+                        </div>
+                        <button class="btn btn-info w-100 text-white">
+                            <i class="fas fa-plus me-2"></i> Tambah Air
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nutrient Trends -->
+                <div class="dash-card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-line me-2"></i> Tren Nutrisi</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="nav nav-tabs nutrient-trend-tabs mb-3" id="nutrientTrendTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab">Minggu Ini</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="monthly-tab" data-bs-toggle="tab" data-bs-target="#monthly" type="button" role="tab">Bulanan</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="nutrientTrendTabContent">
+                            <div class="tab-pane fade show active" id="weekly" role="tabpanel">
+                                <canvas id="weeklyTrendChart" height="250"></canvas>
+                            </div>
+                            <div class="tab-pane fade" id="monthly" role="tabpanel">
+                                <canvas id="monthlyTrendChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nutrition Recommendations -->
+                <div class="dash-card mb-4">
+                    <div class="card-header">
+                        <h5><i class="fas fa-lightbulb me-2"></i> Rekomendasi Gizi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="recommendation-card mb-3">
+                            <h6><i class="fas fa-exclamation-circle text-warning me-2"></i> Protein Anda Kurang</h6>
+                            <p class="mb-0">Tingkatkan asupan protein dengan mengonsumsi telur, ikan, daging tanpa lemak, atau kacang-kacangan.</p>
+                        </div>
+                        <div class="recommendation-card mb-3">
+                            <h6><i class="fas fa-info-circle text-info me-2"></i> Tingkatkan Serat</h6>
+                            <p class="mb-0">Tambahkan buah-buahan segar, sayuran hijau, dan biji-bijian untuk memenuhi kebutuhan serat harian Anda.</p>
+                        </div>
+                        <div class="recommendation-card">
+                            <h6><i class="fas fa-check-circle text-success me-2"></i> Distribusi Kalori Baik</h6>
+                            <p class="mb-0">Pertahankan distribusi kalori Anda sepanjang hari untuk menjaga energi dan metabolisme.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reminders -->
+                <div class="dash-card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bell me-2"></i> Pengingat</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="recommendation-card reminder-card mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0"><i class="fas fa-coffee me-2"></i> Sarapan</h6>
+                                <span>07:00</span>
+                            </div>
+                            <p class="mb-0">Jangan lewatkan sarapan untuk energi di pagi hari!</p>
+                        </div>
+                        <div class="recommendation-card reminder-card mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0"><i class="fas fa-tint me-2"></i> Minum Air</h6>
+                                <span>Setiap 2 jam</span>
+                            </div>
+                            <p class="mb-0">Pastikan Anda terhidrasi sepanjang hari.</p>
+                        </div>
+                        <div class="recommendation-card reminder-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0"><i class="fas fa-utensils me-2"></i> Makan Malam</h6>
+                                <span>19:00</span>
+                            </div>
+                            <p class="mb-0">Waktu untuk makan malam seimbang Anda.</p>
+                        </div>
+                        <button class="btn btn-outline-primary w-100 mt-3">
+                            <i class="fas fa-plus me-2"></i> Tambah Pengingat
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
